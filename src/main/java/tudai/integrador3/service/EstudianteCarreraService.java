@@ -1,5 +1,6 @@
 package tudai.integrador3.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import tudai.integrador3.domain.EstudianteCarrera;
 import tudai.integrador3.domain.EstudianteCarreraKey;
 import tudai.integrador3.repository.EstudianteCarreraRepository;
@@ -15,10 +16,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+
 public class EstudianteCarreraService {
 
+    @Autowired
     private final EstudianteCarreraRepository ecRepository;
+
+    public EstudianteCarreraService(final EstudianteCarreraRepository ecRepository) {
+        this.ecRepository = ecRepository;
+    }
 
     @Transactional
     public EstudianteCarreraResponseDTO matricularEstudiante(EstudianteCarreraRequestDTO request){

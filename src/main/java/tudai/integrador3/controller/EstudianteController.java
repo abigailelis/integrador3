@@ -1,5 +1,6 @@
 package tudai.integrador3.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import tudai.integrador3.service.EstudianteService;
 import tudai.integrador3.service.dto.estudiante.estudianteRequest.EstudianteRequestDTO;
 import tudai.integrador3.service.dto.estudiante.estudianteResponse.EstudianteResponseDTO;
@@ -12,10 +13,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/estudiantes")
-@RequiredArgsConstructor
+
 public class EstudianteController {
 
+    @Autowired
     private final EstudianteService estudianteService;
+
+    public EstudianteController(final EstudianteService estudianteService) {
+        this.estudianteService = estudianteService;
+    }
 
     //Obtiene todos los estudiantes
     @GetMapping

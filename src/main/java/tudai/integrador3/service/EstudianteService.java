@@ -1,5 +1,6 @@
 package tudai.integrador3.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import tudai.integrador3.domain.Estudiante;
 import tudai.integrador3.repository.EstudianteRepository;
 import tudai.integrador3.service.dto.estudiante.estudianteRequest.EstudianteRequestDTO;
@@ -13,10 +14,15 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Service
-@RequiredArgsConstructor
+
 public class EstudianteService {
 
+    @Autowired
     private final EstudianteRepository estudianteRepository;
+
+    public EstudianteService(final EstudianteRepository estudianteRepository) {
+        this.estudianteRepository = estudianteRepository;
+    }
 
     /**
      * Guarda un nuevo estudiante en la base de datos.

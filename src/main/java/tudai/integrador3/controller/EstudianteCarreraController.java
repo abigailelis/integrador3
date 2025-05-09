@@ -1,5 +1,6 @@
 package tudai.integrador3.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import tudai.integrador3.service.EstudianteCarreraService;
 import tudai.integrador3.service.dto.carrera.carreraResponse.CarreraResponseDTO;
 import tudai.integrador3.service.dto.estudianteCarrera.estudianteCarreraRequest.reporteCarreraRequest.EstudianteCarreraRequestDTO;
@@ -14,12 +15,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/carreras/estudiantes")
-@RequiredArgsConstructor
 public class EstudianteCarreraController {
 
+    @Autowired
     private final EstudianteCarreraService ecService;
 
-
+    public EstudianteCarreraController(final EstudianteCarreraService ecService) {
+        this.ecService = ecService;
+    }
 
     //Genera reporte de carreras ordenado por año y nombre de carrera
     @GetMapping("/reporte")
