@@ -1,6 +1,8 @@
 package tudai.integrador3.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import tudai.integrador3.domain.Estudiante;
 import tudai.integrador3.repository.EstudianteRepository;
 import tudai.integrador3.service.dto.estudiante.estudianteRequest.EstudianteRequestDTO;
@@ -34,14 +36,19 @@ public class EstudianteService {
     @Transactional
     public EstudianteResponseDTO altaEstudiante(EstudianteRequestDTO request){
         final var estudiante = new Estudiante(request);
-        final var result = this.estudianteRepository.save(estudiante);
+        int id_estudiante = estudiante.getDNI();
 
-        return new EstudianteResponseDTO(result.getDNI(), result.getNombre(), result.getApellido(), result.getEdad(), result.getGenero(), result.getCiudad(), result.getLU());
+        if(estudianteRepository.findById(id_estudiante).isPresent()){
+            final var result = this.estudianteRepository.save(estudiante);
+            return new EstudianteResponseDTO(id_estudiante, result.getNombre(), result.getApellido(), result.getEdad(), result.getGenero(), result.getCiudad(), result.getLU());
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El estudiante con DNI " + id_estudiante + " ya existe.");
+        }
     }
 
     /**
-     * Obtiene todos los estudiantes del repositorio y los transforma en objetos {@link EstudianteResponseDTO}.
-     * @return una lista de objetos {@link EstudianteResponseDTO} que representan todos los estudiantes en la base de datos.
+     * Obtiene todos los estudiantes
+     * @return una lista de todos los estudiantes de la base de datos.
      */
 
     @Transactional(readOnly = true)
@@ -66,9 +73,9 @@ public class EstudianteService {
     }
 
     /**
-     * Obtiene la lista de estudiantes con el género especificado y los transforma en objetos {@link EstudianteResponseDTO}.
+     * Obtiene la lista de estudiantes con el género especificado
      * @param genero el género de los estudiantes a buscar
-     * @return una lista de objetos {@link EstudianteResponseDTO} que representan los estudiantes filtrados por género
+     * @return una lista de estudiantes filtrados por género
      */
 
     @Transactional(readOnly = true)
@@ -78,7 +85,7 @@ public class EstudianteService {
 
     /**
      * Obtiene una lista de los estudiantes ordenados por apellido y los transforma en objetos {@link EstudianteResponseDTO}.
-     * @return una lista de objetos {@link EstudianteResponseDTO} con los estudiantes ordenados por apellido
+     * @return una lista de estudiantes ordenados por apellido
      */
 
     @Transactional(readOnly = true)
@@ -104,7 +111,7 @@ public class EstudianteService {
      * @return una lista de objetos {@link EstudianteResponseDTO} transformados a partir de la consulta
      */
 
-    private List<EstudianteResponseDTO> obtenerEstudiantesDTO(Supplier<List<Estudiante>> consulta) {
+    public List<EstudianteResponseDTO> obtenerEstudiantesDTO(Supplier<List<Estudiante>> consulta) {
         return consulta.get()
                 .stream()
                 .map(EstudianteResponseDTO::new)

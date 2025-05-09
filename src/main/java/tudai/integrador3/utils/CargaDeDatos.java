@@ -172,7 +172,7 @@ public class CargaDeDatos {
      * @return boolean
      */
     public boolean existeEstudiante(int id_estudiante){
-        return estudianteRepository.findById(id_estudiante).isPresent();
+        return estudianteRepository.existsById(id_estudiante);
     }
 
     /**
@@ -181,7 +181,7 @@ public class CargaDeDatos {
      * @return boolean
      */
     public boolean existeCarrera(int id_carrera){
-        return carreraRepository.findById(id_carrera).isPresent();
+        return carreraRepository.existsById(id_carrera);
     }
 
     /**
@@ -192,12 +192,10 @@ public class CargaDeDatos {
      * @return boolean
      */
     public boolean verificarMatriculacion(int id_estudiante, int id_carrera, EstudianteCarreraKey id_estudianteCarreraKey) {
-        EstudianteCarrera matriculado = null;
-
-        if(existeEstudiante(id_estudiante) && existeCarrera(id_carrera))
-            matriculado = ecRepository.findById(id_estudianteCarreraKey);
-
-        return matriculado == null;
+        if (existeEstudiante(id_estudiante) && existeCarrera(id_carrera)) {
+            return ecRepository.findById(id_estudianteCarreraKey) == null;
+        }
+        return false; // Si el estudiante o la carrera no existen, no puede estar matriculado.
     }
 
 }
