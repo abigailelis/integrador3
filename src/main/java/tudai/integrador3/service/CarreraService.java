@@ -1,5 +1,7 @@
 package tudai.integrador3.service;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import tudai.integrador3.domain.Carrera;
 import tudai.integrador3.domain.Estudiante;
 import tudai.integrador3.repository.CarreraRepository;
@@ -22,18 +24,21 @@ public class CarreraService {
     @Transactional
     public CarreraResponseDTO cargarCarrera(CarreraRequestDTO request){
         final var carrera = new Carrera(request);
-        final var result = this.carreraRepository.save(carrera);
-        long inscriptos = 0;
+        int id_carrera = carrera.getId_carrera();
 
-        return new CarreraResponseDTO(result.getCarrera(), result.getDuracion(), inscriptos);
+        if(carreraRepository.findById(id_carrera).isPresent()){
+            final var result = this.carreraRepository.save(carrera);
+            long inscriptos = 0;
+
+            return new CarreraResponseDTO(result.getCarrera(), result.getDuracion(), inscriptos);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La carrera con el id " + id_carrera + " ya existe.");
+        }
     }
 
     @Transactional(readOnly = true)
     public List<CarreraResponseDTO> buscarCarrerasConEstudiantes(){
-        return this.carreraRepository.buscarCarrerasConEstudiantes()
-                .stream()
-                .map(CarreraResponseDTO::new)
-                .toList();
+        return this.carreraRepository.buscarCarrerasConEstudiantes();
     }
 
 }
