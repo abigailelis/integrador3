@@ -35,6 +35,12 @@ public class EstudianteController {
         return this.estudianteService.buscarEstudiantesGenero(genero);
     }
 
+    // Obtiene estudiantes por género con query params
+    @GetMapping("/genero")
+    public List<EstudianteResponseDTO> buscarEstudiantesGeneroQP(@RequestParam String genero) {
+        return this.estudianteService.buscarEstudiantesGenero(genero);
+    }
+
     //Obtiene estudiantes ordenados por apellido
     @GetMapping("/orderBy/apellido")
     public List<EstudianteResponseDTO> buscarEstudiantesApellido(){
