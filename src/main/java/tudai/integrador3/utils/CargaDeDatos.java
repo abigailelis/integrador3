@@ -1,13 +1,8 @@
 package tudai.integrador3.utils;
 
-import jakarta.persistence.EntityManager;
-import tudai.integrador3.domain.Carrera;
-import tudai.integrador3.domain.Estudiante;
-import tudai.integrador3.domain.EstudianteCarrera;
-import tudai.integrador3.domain.EstudianteCarreraKey;
-import tudai.integrador3.repository.CarreraRepository;
-import tudai.integrador3.repository.EstudianteCarreraRepository;
-import tudai.integrador3.repository.EstudianteRepository;
+
+import tudai.integrador3.domain.*;
+import tudai.integrador3.repository.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -17,7 +12,6 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Optional;
 
 @Component
 public class CargaDeDatos {
@@ -33,6 +27,10 @@ public class CargaDeDatos {
         this.ecRepository = ecRepository;
     }
 
+    /**
+     * Carga los datos desde los csv de estudiantes, carreras y estudianteCarrera a la base de datos
+     * @throws IOException
+     */
     public void cargarDatosCSV() throws IOException {
         File estudianteCSV = ResourceUtils.getFile("src/main/resources/csv/estudiantes.csv");
         File carreraCSV = ResourceUtils.getFile("src/main/resources/csv/carreras.csv");
@@ -44,68 +42,75 @@ public class CargaDeDatos {
 
     }
 
+    /**
+     * Carga los datos desde el csv de estudiantes
+     * @param estudianteCSV path del archivo csv
+     * @throws IOException
+     */
     public void cargarEstudianteCSV(File estudianteCSV) throws IOException {
         try (FileReader reader = new FileReader(estudianteCSV);
              CSVParser csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader)) {
 
-            //DNI,nombre,apellido,edad,genero,ciudad,LU
             for (CSVRecord csvRecord : csvParser) {
-                Estudiante estudiante = new Estudiante();
-                estudiante.setDNI(Integer.parseInt(csvRecord.get("DNI")));
-                estudiante.setNombre(csvRecord.get("nombre"));
-                estudiante.setApellido(csvRecord.get("apellido"));
-                estudiante.setEdad(Integer.parseInt(csvRecord.get("edad")));
-                estudiante.setGenero(csvRecord.get("genero"));
-                estudiante.setCiudad(csvRecord.get("ciudad"));
-                estudiante.setLU(Integer.parseInt(csvRecord.get("LU")));
+                int id_estudiante = Integer.parseInt(csvRecord.get("DNI"));
 
-                estudianteRepository.save(estudiante);
+                if(!existeEstudiante(id_estudiante))
+                    persistEstudiante(id_estudiante, csvRecord);
+                else
+                    System.out.println("No se pudo agregar al estudiante, ya existe el DNI: " + id_estudiante);
             }
         }
     }
 
+    /**
+     * Carga los datos desde el csv de carreras
+     * @param carreraCSV path del archivo csv
+     * @throws IOException
+     */
     public void cargarCarreraCSV(File carreraCSV) throws IOException {
         try (FileReader reader = new FileReader(carreraCSV);
              CSVParser csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader)) {
 
-            //id_carrera,carrera,duracion
             for (CSVRecord csvRecord : csvParser) {
-                Carrera carrera = new Carrera();
-                carrera.setId_carrera(Integer.parseInt(csvRecord.get("id_carrera")));
-                carrera.setCarrera(csvRecord.get("carrera"));
-                carrera.setDuracion(Integer.parseInt(csvRecord.get("duracion")));
+                int id_carrera = Integer.parseInt(csvRecord.get("id_carrera"));
 
-                carreraRepository.save(carrera);
+                if(!existeCarrera(id_carrera))
+                    persistCarrera(id_carrera, csvRecord);
+                else
+                    System.out.println("No se pudo agregar la carrera, ya existe el id: " + id_carrera);
             }
         }
     }
 
+    /**
+     * Carga los datos desde el csv de estudianteCarrera
+     * @param estudianteCarreraCSV path del archivo csv
+     * @throws IOException
+     */
     public void cargarEstudianteCarreraCSV(File estudianteCarreraCSV) throws IOException {
         try (FileReader reader = new FileReader(estudianteCarreraCSV);
              CSVParser csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader)) {
 
-            //id_estudiante,id_carrera,inscripcion,graduacion,antiguedad
             for (CSVRecord csvRecord : csvParser) {
+                int id_estudiante = Integer.parseInt(csvRecord.get("id_estudiante"));
+                int id_carrera = Integer.parseInt(csvRecord.get("id_carrera"));
 
-                EstudianteCarreraKey estudianteCarreraKey = crearKey(Integer.parseInt(csvRecord.get("id_estudiante")), Integer.parseInt(csvRecord.get("id_carrera")));
+                EstudianteCarreraKey estudianteCarreraKey = crearKey(id_estudiante, id_carrera);
 
-                if (verificarMatriculacion(estudianteCarreraKey.getId_estudiante(), estudianteCarreraKey.getId_carrera(), estudianteCarreraKey)) {
-                    EstudianteCarrera estudianteCarrera = new EstudianteCarrera();
-                    estudianteCarrera.setId(estudianteCarreraKey);
-                    estudianteCarrera.setInscripcion(Integer.parseInt(csvRecord.get("inscripcion")));
-                    estudianteCarrera.setGraduacion(Integer.parseInt(csvRecord.get("graduacion")));
-                    estudianteCarrera.setAntiguedad(Integer.parseInt(csvRecord.get("antiguedad")));
-
-                    ecRepository.save(estudianteCarrera);
-
-                } else {
+                if (verificarMatriculacion(id_estudiante, id_carrera, estudianteCarreraKey))
+                    persistEstudianteCarrera(estudianteCarreraKey, csvRecord);
+                else
                     System.out.println("No se puede matricular al estudiante");
-                }
-
             }
         }
     }
 
+    /**
+     * Crea una clave primaria compuesta por el DNI del estudiante y el id de la carrera a matricular
+     * @param id_estudiante DNI del estudiante
+     * @param id_carrera id de la carrera
+     * @return clave compuesta
+     */
     public EstudianteCarreraKey crearKey(int id_estudiante, int id_carrera) {
         EstudianteCarreraKey estudianteCarreraKey = new EstudianteCarreraKey();
         estudianteCarreraKey.setId_estudiante(id_estudiante);
@@ -114,12 +119,85 @@ public class CargaDeDatos {
         return estudianteCarreraKey;
     }
 
-    public boolean verificarMatriculacion(int id_estudiante, int id_carrera, EstudianteCarreraKey id_estudianteCarreraKey) {
-        EstudianteCarrera matriculado = ecRepository.findById(id_estudianteCarreraKey);
-        Optional<Estudiante> estudiante = estudianteRepository.findById(id_estudiante);
-        Optional<Carrera> carrera = carreraRepository.findById(id_carrera);
+    /**
+     * Persiste a un estudiante en la base de datos
+     * @param id_estudiante DNI del estudiante a persistir
+     * @param csvRecord fila con los datos del estudiante obtenida en el csv
+     */
+    public void persistEstudiante(int id_estudiante, CSVRecord csvRecord){
+        Estudiante estudiante = new Estudiante();
+        estudiante.setDNI(id_estudiante);
+        estudiante.setNombre(csvRecord.get("nombre"));
+        estudiante.setApellido(csvRecord.get("apellido"));
+        estudiante.setEdad(Integer.parseInt(csvRecord.get("edad")));
+        estudiante.setGenero(csvRecord.get("genero"));
+        estudiante.setCiudad(csvRecord.get("ciudad"));
+        estudiante.setLU(Integer.parseInt(csvRecord.get("LU")));
 
-        return matriculado == null && estudiante.isPresent() && carrera.isPresent();
+        estudianteRepository.save(estudiante);
+    }
+
+    /**
+     * Persiste a una carrera en la base de datos
+     * @param id_carrera id de la carrera a persistir
+     * @param csvRecord fila con los datos de la carrera obtenida en el csv
+     */
+    public void persistCarrera(int id_carrera, CSVRecord csvRecord){
+        Carrera carrera = new Carrera();
+        carrera.setId_carrera(id_carrera);
+        carrera.setCarrera(csvRecord.get("carrera"));
+        carrera.setDuracion(Integer.parseInt(csvRecord.get("duracion")));
+
+        carreraRepository.save(carrera);
+    }
+
+    /**
+     * Persiste a un estudiante en una carrera determinada en la base de datos
+     * @param estudianteCarreraKey id compuesto por el DNI del estudiante y el id de la carrera
+     * @param csvRecord fila con los datos del estudiante y la carrera obtenida en el csv
+     */
+    public void persistEstudianteCarrera(EstudianteCarreraKey estudianteCarreraKey, CSVRecord csvRecord){
+        EstudianteCarrera estudianteCarrera = new EstudianteCarrera();
+        estudianteCarrera.setId(estudianteCarreraKey);
+        estudianteCarrera.setInscripcion(Integer.parseInt(csvRecord.get("inscripcion")));
+        estudianteCarrera.setGraduacion(Integer.parseInt(csvRecord.get("graduacion")));
+        estudianteCarrera.setAntiguedad(Integer.parseInt(csvRecord.get("antiguedad")));
+
+        ecRepository.save(estudianteCarrera);
+    }
+
+    /**
+     * Verifica si existe un estudiante en la base de datos
+     * @param id_estudiante DNI del estudiante a verificar
+     * @return boolean
+     */
+    public boolean existeEstudiante(int id_estudiante){
+        return estudianteRepository.findById(id_estudiante).isPresent();
+    }
+
+    /**
+     * Verifica si existe una carrera en la base de datos
+     * @param id_carrera id de la carrera a verificar
+     * @return boolean
+     */
+    public boolean existeCarrera(int id_carrera){
+        return carreraRepository.findById(id_carrera).isPresent();
+    }
+
+    /**
+     * Verifica si el estudiante está o no matriculado en la carrera
+     * @param id_estudiante DNI del estudiante a verificar
+     * @param id_carrera id de la carrera a verificar
+     * @param id_estudianteCarreraKey clave compuesta por el DNI del estudiante y el id de la carrera
+     * @return boolean
+     */
+    public boolean verificarMatriculacion(int id_estudiante, int id_carrera, EstudianteCarreraKey id_estudianteCarreraKey) {
+        EstudianteCarrera matriculado = null;
+
+        if(existeEstudiante(id_estudiante) && existeCarrera(id_carrera))
+            matriculado = ecRepository.findById(id_estudianteCarreraKey);
+
+        return matriculado == null;
     }
 
 }

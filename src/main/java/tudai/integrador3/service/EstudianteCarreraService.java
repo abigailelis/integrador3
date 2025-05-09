@@ -41,10 +41,5 @@ public class EstudianteCarreraService {
                 .toList();
     }
 
-    @Transactional(readOnly = true)
-    public Optional<EstudianteCarrera> buscarPorId(Integer idEstudiante, Integer idCarrera) {
-        EstudianteCarreraKey clave = new EstudianteCarreraKey(idEstudiante, idCarrera);
-        return Optional.ofNullable(ecRepository.findById(clave));
-    }
 
 }
