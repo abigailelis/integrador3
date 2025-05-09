@@ -1,8 +1,10 @@
 package tudai.integrador3.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import tudai.integrador3.service.CarreraService;
 import tudai.integrador3.service.dto.carrera.carreraRequest.CarreraRequestDTO;
 import tudai.integrador3.service.dto.carrera.carreraResponse.CarreraResponseDTO;
+import tudai.integrador3.service.dto.estudiante.estudianteResponse.EstudianteResponseDTO;
 import tudai.integrador3.service.dto.reporteCarrera.reporteCarreraResponse.ReporteCarreraResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,15 +15,20 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/carreras")
-@RequiredArgsConstructor
 public class CarreraController {
 
+    @Autowired
     private final CarreraService carreraService;
 
-    //Genera reporte de carreras ordenado por año y nombre de carrera
-    @GetMapping("/reporte")
-    public List<ReporteCarreraResponseDTO>  generarReporteCarreras(){
-        return this.carreraService.generarReporteCarreras();
+    public CarreraController(CarreraService carreraService) {
+        this.carreraService = carreraService;
+    }
+
+
+    //Devuelve una lista de carreras con la cantidad de inscriptos
+    @GetMapping("/inscriptos")
+    public List<CarreraResponseDTO> buscarCarrerasConEstudiantes(){
+        return this.carreraService.buscarCarrerasConEstudiantes();
     }
 
     //Carga una nueva carrera

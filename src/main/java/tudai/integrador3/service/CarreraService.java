@@ -1,14 +1,17 @@
 package tudai.integrador3.service;
 
 import tudai.integrador3.domain.Carrera;
+import tudai.integrador3.domain.Estudiante;
 import tudai.integrador3.repository.CarreraRepository;
 import tudai.integrador3.service.dto.carrera.carreraRequest.CarreraRequestDTO;
 import tudai.integrador3.service.dto.carrera.carreraResponse.CarreraResponseDTO;
+import tudai.integrador3.service.dto.estudiante.estudianteResponse.EstudianteResponseDTO;
 import tudai.integrador3.service.dto.reporteCarrera.reporteCarreraResponse.ReporteCarreraResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -26,10 +29,10 @@ public class CarreraService {
     }
 
     @Transactional(readOnly = true)
-    public List<ReporteCarreraResponseDTO> generarReporteCarreras(){
-        return this.carreraRepository.generarReporteCarreras()
+    public List<CarreraResponseDTO> buscarCarrerasConEstudiantes(){
+        return this.carreraRepository.buscarCarrerasConEstudiantes()
                 .stream()
-                .map(ReporteCarreraResponseDTO::new)
+                .map(CarreraResponseDTO::new)
                 .toList();
     }
 

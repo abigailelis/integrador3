@@ -9,6 +9,7 @@ import tudai.integrador3.service.dto.estudianteCarrera.estudianteCarreraResponse
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tudai.integrador3.service.dto.reporteCarrera.reporteCarreraResponse.ReporteCarreraResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,11 +34,13 @@ public class EstudianteCarreraService {
         return new EstudianteCarreraResponseDTO(inscripcion, graduacion , antiguedad, dni_estudiante, carrera);
     }
 
+
+
     @Transactional(readOnly = true)
-    public List<CarreraResponseDTO> buscarCarrerasConEstudiantes(){
-        return this.ecRepository.buscarCarrerasConEstudiantes()
+    public List<ReporteCarreraResponseDTO> generarReporteCarreras(){
+        return this.ecRepository.generarReporteCarreras()
                 .stream()
-                .map(CarreraResponseDTO::new)
+                .map(ReporteCarreraResponseDTO::new)
                 .toList();
     }
 

@@ -3,6 +3,7 @@ package tudai.integrador3.service.dto.carrera.carreraResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import tudai.integrador3.domain.Carrera;
 
 @Data
 @RequiredArgsConstructor
@@ -18,4 +19,5 @@ public class CarreraResponseDTO {
         this.duracion = carrera.getDuracion();
         this.inscriptos = carrera.getInscriptos();
     }
+
 }
