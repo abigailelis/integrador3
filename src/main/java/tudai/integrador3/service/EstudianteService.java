@@ -53,7 +53,7 @@ public class EstudianteService {
 
     @Transactional(readOnly = true)
     public List<EstudianteResponseDTO> findAll(){
-        return obtenerEstudiantesDTO(estudianteRepository::findAll);
+        return estudianteRepository::findAll;
     }
 
     /**
@@ -68,7 +68,6 @@ public class EstudianteService {
     @Transactional(readOnly = true)
     public EstudianteResponseDTO buscarEstudianteLU(int LU){
         return this.estudianteRepository.buscarEstudianteLU(LU)
-                .map(EstudianteResponseDTO::new)
                 .orElseThrow(() -> new NotFoundException("Estudiante", "LU", LU ));
     }
 
@@ -80,7 +79,7 @@ public class EstudianteService {
 
     @Transactional(readOnly = true)
     public List<EstudianteResponseDTO> buscarEstudiantesGenero(String genero){
-        return  obtenerEstudiantesDTO(() -> estudianteRepository.buscarEstudiantesGenero(genero));
+        return estudianteRepository.buscarEstudiantesGenero(genero);
     }
 
     /**
@@ -90,7 +89,7 @@ public class EstudianteService {
 
     @Transactional(readOnly = true)
     public List<EstudianteResponseDTO> buscarEstudiantesApellido(){
-        return obtenerEstudiantesDTO(estudianteRepository::buscarEstudiantesApellido);
+        return estudianteRepository::buscarEstudiantesApellido;
     }
 
     /**
@@ -102,19 +101,8 @@ public class EstudianteService {
 
     @Transactional(readOnly = true)
     public List<EstudianteResponseDTO> buscarEstudiantesCarreraCiudad(String carrera, String ciudad){
-        return obtenerEstudiantesDTO(() -> estudianteRepository.buscarEstudiantesCarreraCiudad(carrera, ciudad));
+        return estudianteRepository.buscarEstudiantesCarreraCiudad(carrera, ciudad);
     }
 
-    /**
-     * Obtiene una lista de objetos EstudianteResponseDTO a partir de una consulta de Estudiantes.
-     * @param consulta un {@link Supplier} que proporciona una lista de objetos {@link Estudiante}
-     * @return una lista de objetos {@link EstudianteResponseDTO} transformados a partir de la consulta
-     */
-
-    public List<EstudianteResponseDTO> obtenerEstudiantesDTO(Supplier<List<Estudiante>> consulta) {
-        return consulta.get()
-                .stream()
-                .map(EstudianteResponseDTO::new)
-                .toList();
-    }
+   
 }
