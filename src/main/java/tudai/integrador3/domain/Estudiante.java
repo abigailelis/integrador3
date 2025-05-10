@@ -8,8 +8,6 @@ import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import tudai.integrador3.service.dto.estudiante.estudianteRequest.EstudianteRequestDTO;
-
 import java.util.List;
 
 /**
@@ -23,22 +21,22 @@ public class Estudiante {
     @Id
     private int DNI;
 
-    @Column
+    @Column (nullable = false)
     private String nombre;
 
-    @Column
+    @Column (nullable = false)
     private String apellido;
 
-    @Column
+    @Column (nullable = false)
     private int edad;
 
-    @Column
+    @Column (nullable = false)
     private String genero;
 
-    @Column
+    @Column (nullable = false)
     private String ciudad;
 
-    @Column
+    @Column (nullable = false)
     private int LU;
 
     /**

@@ -2,29 +2,19 @@ package tudai.integrador3.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import tudai.integrador3.domain.EstudianteCarrera;
-import tudai.integrador3.domain.EstudianteCarreraKey;
 import tudai.integrador3.repository.EstudianteCarreraRepository;
-import tudai.integrador3.service.dto.carrera.carreraResponse.CarreraResponseDTO;
 import tudai.integrador3.service.dto.estudianteCarrera.estudianteCarreraRequest.reporteCarreraRequest.EstudianteCarreraRequestDTO;
 import tudai.integrador3.service.dto.estudianteCarrera.estudianteCarreraResponse.reporteCarreraResponse.EstudianteCarreraResponseDTO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tudai.integrador3.service.dto.reporteCarrera.reporteCarreraResponse.ReporteCarreraResponseDTO;
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
-
 public class EstudianteCarreraService {
 
     @Autowired
-    private final EstudianteCarreraRepository ecRepository;
-
-    public EstudianteCarreraService(final EstudianteCarreraRepository ecRepository) {
-        this.ecRepository = ecRepository;
-    }
+    private EstudianteCarreraRepository ecRepository;
 
     @Transactional
     public EstudianteCarreraResponseDTO matricularEstudiante(EstudianteCarreraRequestDTO request){

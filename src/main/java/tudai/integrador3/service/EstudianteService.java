@@ -20,11 +20,7 @@ import java.util.function.Supplier;
 public class EstudianteService {
 
     @Autowired
-    private final EstudianteRepository estudianteRepository;
-
-    public EstudianteService(final EstudianteRepository estudianteRepository) {
-        this.estudianteRepository = estudianteRepository;
-    }
+    private EstudianteRepository estudianteRepository;
 
     /**
      * Guarda un nuevo estudiante en la base de datos.

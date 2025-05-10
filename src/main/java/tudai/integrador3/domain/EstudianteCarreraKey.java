@@ -15,6 +15,7 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 public class EstudianteCarreraKey implements Serializable {
+
     private int id_estudiante;
     private int id_carrera;
 

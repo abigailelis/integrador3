@@ -1,13 +1,12 @@
 package tudai.integrador3.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import tudai.integrador3.domain.Carrera;
 import tudai.integrador3.service.dto.carrera.carreraResponse.CarreraResponseDTO;
-import tudai.integrador3.service.dto.reporteCarrera.reporteCarreraResponse.ReporteCarreraResponseDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import java.util.List;
+
 @Repository
 public interface CarreraRepository extends JpaRepository<Carrera, Integer> {
 

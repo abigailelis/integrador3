@@ -4,13 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import tudai.integrador3.service.CarreraService;
 import tudai.integrador3.service.dto.carrera.carreraRequest.CarreraRequestDTO;
 import tudai.integrador3.service.dto.carrera.carreraResponse.CarreraResponseDTO;
-import tudai.integrador3.service.dto.estudiante.estudianteResponse.EstudianteResponseDTO;
-import tudai.integrador3.service.dto.reporteCarrera.reporteCarreraResponse.ReporteCarreraResponseDTO;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -18,15 +14,10 @@ import java.util.List;
 public class CarreraController {
 
     @Autowired
-    private final CarreraService carreraService;
-
-    public CarreraController(CarreraService carreraService) {
-        this.carreraService = carreraService;
-    }
-
+    private CarreraService carreraService;
 
     //Devuelve una lista de carreras con la cantidad de inscriptos
-    @GetMapping("/inscriptos")
+    @GetMapping("")
     public List<CarreraResponseDTO> buscarCarrerasConEstudiantes(){
         return this.carreraService.buscarCarrerasConEstudiantes();
     }

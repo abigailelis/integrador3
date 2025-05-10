@@ -25,13 +25,13 @@ public class EstudianteCarrera {
     @EmbeddedId
     private EstudianteCarreraKey id;
 
-    @Column
+    @Column (nullable = false)
     private int inscripcion;
 
-    @Column
+    @Column (nullable = false)
     private int graduacion;
 
-    @Column
+    @Column (nullable = false)
     private int antiguedad;
 
     /**

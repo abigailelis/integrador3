@@ -5,23 +5,16 @@ import tudai.integrador3.service.EstudianteService;
 import tudai.integrador3.service.dto.estudiante.estudianteRequest.EstudianteRequestDTO;
 import tudai.integrador3.service.dto.estudiante.estudianteResponse.EstudianteResponseDTO;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("api/estudiantes")
-
 public class EstudianteController {
 
     @Autowired
-    private final EstudianteService estudianteService;
-
-    public EstudianteController(final EstudianteService estudianteService) {
-        this.estudianteService = estudianteService;
-    }
+    private EstudianteService estudianteService;
 
     //Obtiene todos los estudiantes
     @GetMapping

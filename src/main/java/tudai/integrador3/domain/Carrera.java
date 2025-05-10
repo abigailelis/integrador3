@@ -21,10 +21,10 @@ public class Carrera {
     @Id
     private int id_carrera;
 
-    @Column
+    @Column (nullable = false)
     private String carrera;
 
-    @Column
+    @Column (nullable = false)
     private int duracion;
 
     @Version
