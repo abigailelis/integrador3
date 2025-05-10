@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface EstudianteCarreraRepository extends JpaRepository<EstudianteCarrera, Integer> {
 
+    //Obtiene un reporte de todas las carreras ordenado alfabeticamente por carreras y cronoglogicamente por años
     @Query("SELECT new tudai.integrador3.service.dto.reporteCarrera.reporteCarreraResponse.ReporteCarreraResponseDTO(c.carrera, " +
             "COALESCE(ec.inscripcion, ec.graduacion), " +
             "SUM(CASE WHEN ec.inscripcion IS NOT NULL THEN 1 ELSE 0 END), " +
@@ -21,6 +22,6 @@ public interface EstudianteCarreraRepository extends JpaRepository<EstudianteCar
             "ORDER BY c.carrera, COALESCE(ec.inscripcion, ec.graduacion)")
     List<ReporteCarreraResponseDTO> generarReporteCarreras();
 
-
+    //Obtiene un estudiante en una determinada carrera según clave primaria compuesta por DNI estudiante y id_carrera
     EstudianteCarrera findById(EstudianteCarreraKey idEstudianteCarreraKey);
 }

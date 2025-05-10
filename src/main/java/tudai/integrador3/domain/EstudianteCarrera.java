@@ -49,10 +49,4 @@ public class EstudianteCarrera {
     @ManyToOne
     @JoinColumn(name = "id_carrera", referencedColumnName = "id_carrera", insertable = false, updatable = false)
     private Carrera carrera;
-
-    public EstudianteCarrera(EstudianteCarreraRequestDTO request) {
-        this.inscripcion = request.getInscripcion();
-        this.graduacion = request.getGraduacion();
-        this.antiguedad = request.getAntiguedad();
-    }
 }

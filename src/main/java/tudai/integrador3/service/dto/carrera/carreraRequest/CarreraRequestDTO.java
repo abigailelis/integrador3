@@ -3,10 +3,12 @@ package tudai.integrador3.service.dto.carrera.carreraRequest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @JsonIgnoreProperties( ignoreUnknown = true)
+@AllArgsConstructor
 public class CarreraRequestDTO {
 
     @NotBlank( message = "El nombre de la carrera es un campo obligatorio.")

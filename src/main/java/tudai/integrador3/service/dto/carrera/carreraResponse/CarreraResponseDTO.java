@@ -12,11 +12,5 @@ public class CarreraResponseDTO {
     private String carrera;
     private int duracion;
     private long inscriptos;
-    
-    public CarreraResponseDTO(CarreraResponseDTO carrera) {
-        this.carrera = carrera.getCarrera();
-        this.duracion = carrera.getDuracion();
-        this.inscriptos = carrera.getInscriptos();
-    }
 
 }

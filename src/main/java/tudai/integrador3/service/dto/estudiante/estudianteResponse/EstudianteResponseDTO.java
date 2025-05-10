@@ -18,14 +18,4 @@ public class EstudianteResponseDTO {
     private String ciudad;
     private int LU;
 
-    public EstudianteResponseDTO(Estudiante estudiante){
-        this.DNI = estudiante.getDNI();
-        this.nombre = estudiante.getNombre();
-        this.apellido = estudiante.getApellido();
-        this.edad = estudiante.getEdad();
-        this.genero = estudiante.getGenero();
-        this.ciudad = estudiante.getCiudad();
-        this.LU = estudiante.getLU();
-    }
-
 }

@@ -19,10 +19,8 @@ public class EstudianteCarreraKey implements Serializable {
     private int id_estudiante;
     private int id_carrera;
 
-    // Constructor vacío (necesario para JPA)
     public EstudianteCarreraKey() {}
 
-    // Implementar equals()
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -32,7 +30,6 @@ public class EstudianteCarreraKey implements Serializable {
                 Objects.equals(id_carrera, that.id_carrera);
     }
 
-    // Implementar hashCode()
     @Override
     public int hashCode() {
         return Objects.hash(id_estudiante, id_carrera);

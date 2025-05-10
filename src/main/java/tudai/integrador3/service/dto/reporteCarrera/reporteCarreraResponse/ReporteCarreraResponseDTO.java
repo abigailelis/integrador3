@@ -11,12 +11,4 @@ public class ReporteCarreraResponseDTO {
     private int anio;
     private long inscriptos;
     private long graduados;
-
-    public ReporteCarreraResponseDTO(ReporteCarreraResponseDTO rcResponseDTO) {
-        this.carrera = rcResponseDTO.getCarrera();
-        this.anio = rcResponseDTO.getAnio();
-        this.inscriptos = rcResponseDTO.getInscriptos();
-        this.graduados = rcResponseDTO.getGraduados();
-    }
-
 }

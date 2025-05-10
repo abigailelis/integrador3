@@ -11,6 +11,6 @@ public class EstudianteCarreraResponseDTO {
     private int graduacion;
     private int antiguedad;
     private int dni_estudiante;
-    private String nombre_carrera;
+    private int id_carrera;
 
 }

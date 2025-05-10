@@ -5,7 +5,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import java.io.IOException;
 
 @SpringBootApplication
@@ -15,14 +14,12 @@ public class SpringbootApplication {
     CargaDeDatos cargaDeDatos;
 
     public static void main(String[] args) {
-
         SpringApplication.run(SpringbootApplication.class, args);
     }
 
     @PostConstruct
     public void init() throws IOException {
-        cargaDeDatos.cargarDatosCSV(); // Comenta esta línea para probar si el error desaparece
-        //System.out.println("Aplicación iniciada sin cargar CSV");
+        cargaDeDatos.cargarDatosCSV();
     }
 }
 

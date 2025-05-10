@@ -17,21 +17,22 @@ public class CarreraService {
     @Autowired
     private CarreraRepository carreraRepository;
 
+    //Persiste una carrera en la base de datos si no existe el id sino arroja un error.
     @Transactional
     public CarreraResponseDTO cargarCarrera(CarreraRequestDTO request){
-        final var carrera = new Carrera(request);
-        int id_carrera = carrera.getId_carrera();
+        Carrera carrera = new Carrera(request);
+        String nombre = carrera.getCarrera();
 
-        if(carreraRepository.findById(id_carrera).isPresent()){
+        if(carreraRepository.findByName(nombre) == null){
             final var result = this.carreraRepository.save(carrera);
             long inscriptos = 0;
-
             return new CarreraResponseDTO(result.getCarrera(), result.getDuracion(), inscriptos);
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La carrera con el id " + id_carrera + " ya existe.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La carrera con el nombre " + nombre + " ya existe.");
         }
     }
 
+    //Obtiene una lista de CarreraResponseDTO con la cantidad de inscriptos correspondientes
     @Transactional(readOnly = true)
     public List<CarreraResponseDTO> buscarCarrerasConEstudiantes(){
         return this.carreraRepository.buscarCarrerasConEstudiantes();

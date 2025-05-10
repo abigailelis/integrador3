@@ -17,7 +17,7 @@ public class EstudianteController {
     private EstudianteService estudianteService;
 
     //Obtiene todos los estudiantes
-    @GetMapping
+    @GetMapping("")
     public List<EstudianteResponseDTO> findAll(){
         return estudianteService.findAll();
     }
@@ -34,12 +34,6 @@ public class EstudianteController {
         return this.estudianteService.buscarEstudiantesGenero(genero);
     }
 
-    // Obtiene estudiantes por género con query params
-    @GetMapping("/genero")
-    public List<EstudianteResponseDTO> buscarEstudiantesGeneroQP(@RequestParam String genero) {
-        return this.estudianteService.buscarEstudiantesGenero(genero);
-    }
-
     //Obtiene estudiantes ordenados por apellido
     @GetMapping("/orderBy/apellido")
     public List<EstudianteResponseDTO> buscarEstudiantesApellido(){
@@ -47,7 +41,7 @@ public class EstudianteController {
     }
 
     //Obtiene estudiantes filtrados por carrera y ciudad
-    @GetMapping("/carrera-ciudad/{carrera}/{ciudad}")
+    @GetMapping("/carreraPorCiudad/{carrera}/{ciudad}")
     public List<EstudianteResponseDTO> buscarEstudiantesCarreraCiudad( @PathVariable String carrera, @PathVariable String ciudad){
         return this.estudianteService.buscarEstudiantesCarreraCiudad(carrera, ciudad);
     }

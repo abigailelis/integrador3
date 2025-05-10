@@ -18,19 +18,13 @@ public class EstudianteService {
     @Autowired
     private EstudianteRepository estudianteRepository;
 
-    /**
-     * Guarda un nuevo estudiante en la base de datos.
-     * Convierte un {@link EstudianteRequestDTO} en un objeto {@link Estudiante} y lo guarda en el repositorio.
-     * @param request un objeto {@link EstudianteRequestDTO} con los datos del estudiante a registrar
-     * @return un {@link EstudianteResponseDTO} con la información del estudiante guardado
-     */
-
+    //Da de alta un estudiante nuevo
     @Transactional
     public EstudianteResponseDTO altaEstudiante(EstudianteRequestDTO request){
         final var estudiante = new Estudiante(request);
         int id_estudiante = estudiante.getDNI();
 
-        if(estudianteRepository.findById(id_estudiante).isPresent()){
+        if(!estudianteRepository.findById(id_estudiante).isPresent()){
             final var result = this.estudianteRepository.save(estudiante);
             return new EstudianteResponseDTO(id_estudiante, result.getNombre(), result.getApellido(), result.getEdad(), result.getGenero(), result.getCiudad(), result.getLU());
         } else {
@@ -38,63 +32,35 @@ public class EstudianteService {
         }
     }
 
-    /**
-     * Obtiene todos los estudiantes
-     * @return una lista de todos los estudiantes de la base de datos.
-     */
-
+    //Obtiene una lista de todos los estudiantes
     @Transactional(readOnly = true)
     public List<EstudianteResponseDTO> findAll(){
         return this.estudianteRepository.obtenerTodosLosEstudiantes();
     }
 
-    /**
-     * Busca un estudiante por número de LU.
-     * <p>Si el estudiante es encontrado, se transforma en un {@link EstudianteResponseDTO}.
-     * En caso contrario, lanza una excepción {@link NotFoundException}.</p>
-     * @param LU número de libreta universitaria del estudiante a buscar.
-     * @return un {@link EstudianteResponseDTO} con la información del estudiante encontrado
-     * @throws NotFoundException si el estudiante con el LU especificado no existe
-     */
-
+   //Obtiene un estudiante por LU si existe y sino arroja un error
     @Transactional(readOnly = true)
     public EstudianteResponseDTO buscarEstudianteLU(int LU){
         return this.estudianteRepository.buscarEstudianteLU(LU)
                 .orElseThrow(() -> new NotFoundException("Estudiante", "LU", LU ));
     }
 
-    /**
-     * Obtiene la lista de estudiantes con el género especificado
-     * @param genero el género de los estudiantes a buscar
-     * @return una lista de estudiantes filtrados por género
-     */
-
+    //Obtiene una lista de todos los estudiantes filtrados por género (recibido por parámetro)
     @Transactional(readOnly = true)
     public List<EstudianteResponseDTO> buscarEstudiantesGenero(String genero){
         return estudianteRepository.buscarEstudiantesGenero(genero);
     }
 
-    /**
-     * Obtiene una lista de los estudiantes ordenados por apellido y los transforma en objetos {@link EstudianteResponseDTO}.
-     * @return una lista de estudiantes ordenados por apellido
-     */
-
+    //Obtiene la lista de todos los estudiantes ordenados por apellido ascendentemente
     @Transactional(readOnly = true)
     public List<EstudianteResponseDTO> buscarEstudiantesApellido(){
         return estudianteRepository.buscarEstudiantesApellido();
     }
 
-    /**
-     * Filtra los estudiantes que pertenecen a la carrera y ciudad especificadas y los transforma en objetos {@link EstudianteResponseDTO}.
-     * @param carrera la carrera universitaria de los estudiantes a buscar
-     * @param ciudad la ciudad de residencia de los estudiantes a buscar
-     * @return una lista de objetos {@link EstudianteResponseDTO} con los estudiantes filtrados por carrera y ciudad
-     */
-
+    //Obtiene una lista de todos los estudiantes de una ciudad y una carrera (recibidas por parámetro)
     @Transactional(readOnly = true)
     public List<EstudianteResponseDTO> buscarEstudiantesCarreraCiudad(String carrera, String ciudad){
         return estudianteRepository.buscarEstudiantesCarreraCiudad(carrera, ciudad);
     }
-
    
 }
